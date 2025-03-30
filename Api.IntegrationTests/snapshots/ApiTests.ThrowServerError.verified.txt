@@ -10,11 +10,11 @@
       Expires: -1
     },
     Value: {
-      type: Bad Request,
-      title: Not Found,
-      status: 400,
-      detail: Order Guid_1 not found,
-      instance: GET /api/orders/Guid_1,
+      type: ApplicationException,
+      title: Internal Server Error,
+      status: 500,
+      detail: Something went wrong,
+      instance: GET /server-issue,
       requestId: {Scrubbed}
     }
   }

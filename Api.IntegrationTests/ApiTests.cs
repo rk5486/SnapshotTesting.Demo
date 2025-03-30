@@ -13,7 +13,7 @@ public class ApiTests
     {
         _verifySettings = new VerifySettings();
         _verifySettings.ScrubInlineGuids();
-        _verifySettings.ScrubMember<ProblemDetails>(x => x.Extensions);
+        _verifySettings.ScrubMember("requestId");
         _verifySettings.UseDirectory("snapshots");
     }
 

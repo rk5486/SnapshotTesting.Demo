@@ -1,8 +1,31 @@
+using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api;
+
+public abstract class ProblemException : Exception
+{
+    public HttpStatusCode StatusCode { get; }
+    public string Error { get; }
+    public string Message { get; }
+
+    public ProblemException(HttpStatusCode statusCode, string error, string message) : base(message)
+    {
+        StatusCode = statusCode;
+        Error = error;
+        Message = message;
+    }
+}
+
+public class InvalidRequestProblem(string error, string message)
+    : ProblemException(HttpStatusCode.BadRequest, error, message);
+
+public class ValidationProblem(string message)
+    : InvalidRequestProblem("Validation Error", message);
+
+public class NotFoundProblem(string message)
+    : InvalidRequestProblem("Not Found", message);
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
@@ -15,12 +38,24 @@ public class GlobalExceptionHandler : IExceptionHandler
 
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        httpContext.Response.StatusCode = exception switch
+        if (exception is not ProblemException problemException)
         {
-            ApplicationException => StatusCodes.Status400BadRequest,
-            _                    => StatusCodes.Status500InternalServerError
-        };
-
+            return await _problemDetailsService.TryWriteAsync(
+                new ProblemDetailsContext
+                {
+                    HttpContext = httpContext,
+                    Exception = exception,
+                    ProblemDetails = new ProblemDetails
+                    {
+                        Status = StatusCodes.Status500InternalServerError,
+                        Type = exception.GetType().Name,
+                        Title = "Internal Server Error",
+                        Detail = exception.Message,
+                    }
+                }
+            );
+        }
+        
         return await _problemDetailsService.TryWriteAsync(
             new ProblemDetailsContext
             {
@@ -28,9 +63,10 @@ public class GlobalExceptionHandler : IExceptionHandler
                 Exception = exception,
                 ProblemDetails = new ProblemDetails
                 {
-                    Type = exception.GetType().Name,
-                    Title = "Internal Server Error",
-                    Detail = exception.Message,
+                    Status = StatusCodes.Status400BadRequest,
+                    Type = "Bad Request",
+                    Title = problemException.Error,
+                    Detail = problemException.Message,
                 }
             }
         );

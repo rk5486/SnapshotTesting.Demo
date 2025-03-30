@@ -46,7 +46,7 @@ app.MapGet(
 
            if (order is null)
            {
-               return Results.NotFound();
+               throw new NotFoundProblem($"Order {orderId} not found");
            }
            
            return Results.Ok(new OrderResponse
