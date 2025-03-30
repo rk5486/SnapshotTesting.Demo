@@ -21,7 +21,7 @@ public class ApiTests
         // ARRANGE
         CreateOrderRequest request = new()
         {
-            CustomerName = "John Doe",
+            CustomerName = "Mr Nobody",
         };
         
         await using var application = new WebApplicationFactory<Program>();
@@ -43,7 +43,7 @@ public class ApiTests
         // ARRANGE
         CreateOrderRequest request = new()
         {
-            CustomerName = "John Doe",
+            CustomerName = "Mr Nobody",
         };
         
         await using var application = new WebApplicationFactory<Program>();

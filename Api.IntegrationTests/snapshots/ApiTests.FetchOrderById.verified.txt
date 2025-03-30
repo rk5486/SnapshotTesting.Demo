@@ -6,7 +6,7 @@
     },
     Value: {
       orderId: Guid_1,
-      customerName: John Doe,
+      customerName: Mr Nobody,
       dateOrdered: DateTimeOffset_1
     }
   }
