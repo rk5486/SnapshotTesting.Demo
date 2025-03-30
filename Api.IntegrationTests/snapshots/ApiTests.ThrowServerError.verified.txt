@@ -1,0 +1,22 @@
+﻿{
+  Status: 500 Internal Server Error,
+  Content: {
+    Headers: {
+      Content-Type: text/plain; charset=utf-8
+    },
+    Value:
+System.ApplicationException: Something went wrong
+   at Program.<>c.<<Main>$>b__0_2() in {SolutionDirectory}Api\Program.cs:line 71
+   at lambda_method28(Closure, Object, HttpContext)
+   at Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+
+HEADERS
+=======
+Host: localhost
+
+  }
+}

@@ -55,4 +55,32 @@ public class ApiTests
         // ASSERT
         await Verify(actual, _verifySettings);
     }
+    
+    [Fact]
+    public async Task GivenOrderId_WhenNotExist_ThenNotFound()
+    {
+        // ARRANGE
+        await using var application = new WebApplicationFactory<Program>();
+        using var client = application.CreateClient();
+        
+        // ACT
+        var actual = await client.GetAsync($"/api/orders/{Guid.NewGuid()}", CancellationToken.None);
+        
+        // ASSERT
+        await Verify(actual, _verifySettings);
+    }
+    
+    [Fact]
+    public async Task ThrowServerError()
+    {
+        // ARRANGE
+        await using var application = new WebApplicationFactory<Program>();
+        using var client = application.CreateClient();
+        
+        // ACT
+        var actual = await client.GetAsync("/server-issue");
+        
+        // ASSERT
+        await Verify(actual, _verifySettings);
+    }
 }
