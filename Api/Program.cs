@@ -1,8 +1,11 @@
+using Api;
 using Microsoft.AspNetCore.Mvc;
+using ZiggyCreatures.Caching.Fusion;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddFusionCache();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -20,12 +23,46 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapGet(
-       "/api/orders/{orderId:guid}", ([FromRoute] Guid orderId) =>
+       "/api/orders/{orderId:guid}", ([FromRoute] Guid orderId, IFusionCache cache) =>
        {
-           return Results.Ok(new OrderResponse(orderId, "Mr Nobody",DateTimeOffset.Parse("30-Mar-25 1:19:06 AM +11:00")));
+           Order? order = cache.GetOrDefault<Order>(orderId.ToString());
+
+           if (order is null)
+           {
+               return Results.NotFound();
+           }
+           
+           return Results.Ok(new OrderResponse
+           {
+               OrderId = order.OrderId,
+               CustomerName = order.CustomerName,
+               DateOrdered = order.DateOrdered,
+           });
        }
    )
-   .WithName("GetOrderById")
+   .WithName("FetchOrderById")
+   .WithOpenApi();
+
+app.MapPost(
+       "/api/orders", ([FromBody] CreateOrderRequest req, IFusionCache cache) =>
+       {
+           Order order = new()
+           {
+               OrderId = Guid.NewGuid(),
+               CustomerName = req.CustomerName,
+               DateOrdered = DateTimeOffset.UtcNow,
+           };
+           
+           cache.Set(order.OrderId.ToString(), order);
+           return Results.CreatedAtRoute("FetchOrderById", new { orderId = order.OrderId }, new OrderResponse
+           {
+               OrderId = order.OrderId,
+               CustomerName = order.CustomerName,
+               DateOrdered = order.DateOrdered,
+           });
+       }
+   )
+   .WithName("CreateOrder")
    .WithOpenApi();
 
 app.MapGet(
@@ -40,5 +77,3 @@ app.MapGet(
 app.Run();
 
 public partial class Program;
-
-public record OrderResponse(Guid OrderId, string CustomerName, DateTimeOffset DateOrdered);
