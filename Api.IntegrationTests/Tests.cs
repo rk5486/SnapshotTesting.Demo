@@ -15,6 +15,6 @@ public class Tests
         var actual = await client.GetAsync($"/api/orders/{Guid.NewGuid()}", CancellationToken.None);
         
         // ASSERT
-        Assert.True(actual.IsSuccessStatusCode);
+        await Verify(actual);
     }
 }
