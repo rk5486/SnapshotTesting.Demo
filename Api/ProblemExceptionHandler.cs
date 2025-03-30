@@ -20,8 +20,6 @@ public class ProblemExceptionHandler : IExceptionHandler
             ApplicationException => StatusCodes.Status400BadRequest,
             _                    => StatusCodes.Status500InternalServerError
         };
-        
-        var activity = httpContext.Features.Get<IHttpActivityFeature>()?.Activity;
 
         return await _problemDetailsService.TryWriteAsync(
             new ProblemDetailsContext
@@ -33,12 +31,6 @@ public class ProblemExceptionHandler : IExceptionHandler
                     Type = exception.GetType().Name,
                     Title = "Internal Server Error",
                     Detail = exception.Message,
-                    Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
-                    Extensions = new Dictionary<string, object?>
-                    {
-                        { "requestId", httpContext.TraceIdentifier },
-                        { "traceId", activity?.TraceId },
-                    }
                 }
             }
         );
