@@ -11,6 +11,7 @@ public class ApiTests
     public ApiTests()
     {
         _verifySettings = new VerifySettings();
+        _verifySettings.ScrubInlineGuids();
         _verifySettings.UseDirectory("snapshots");
     }
 
@@ -31,6 +32,25 @@ public class ApiTests
         
         // ACT
         var actual = await client.GetAsync($"/api/orders/{orderResponse!.OrderId}", CancellationToken.None);
+        
+        // ASSERT
+        await Verify(actual, _verifySettings);
+    }
+    
+    [Fact]
+    public async Task CreateOrder()
+    {
+        // ARRANGE
+        CreateOrderRequest request = new()
+        {
+            CustomerName = "John Doe",
+        };
+        
+        await using var application = new WebApplicationFactory<Program>();
+        using var client = application.CreateClient();
+        
+        // ACT
+        var actual = await client.PostAsync("/api/orders", JsonContent.Create(request));
         
         // ASSERT
         await Verify(actual, _verifySettings);
