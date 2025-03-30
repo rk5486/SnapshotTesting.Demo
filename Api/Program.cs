@@ -20,7 +20,7 @@ builder.Services.AddProblemDetails(
         };
     }
 );
-builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

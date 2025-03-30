@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api;
 
-public class ProblemExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler : IExceptionHandler
 {
     private readonly IProblemDetailsService _problemDetailsService;
 
-    public ProblemExceptionHandler(IProblemDetailsService problemDetailsService)
+    public GlobalExceptionHandler(IProblemDetailsService problemDetailsService)
     {
         _problemDetailsService = problemDetailsService;
     }
