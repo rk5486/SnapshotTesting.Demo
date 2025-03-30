@@ -1,4 +1,5 @@
 using Api;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using ZiggyCreatures.Caching.Fusion;
 
@@ -6,12 +7,28 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddFusionCache();
+builder.Services.AddProblemDetails(
+    opt =>
+    {
+        opt.CustomizeProblemDetails = ctx =>
+        {
+            ctx.ProblemDetails.Instance = $"{ctx.HttpContext.Request.Method} {ctx.HttpContext.Request.Path}";
+            ctx.ProblemDetails.Extensions.TryAdd("requestId", ctx.HttpContext.TraceIdentifier);
+            
+            var activity = ctx.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+            ctx.ProblemDetails.Extensions.TryAdd("traceId", activity?.TraceId);
+        };
+    }
+);
+builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

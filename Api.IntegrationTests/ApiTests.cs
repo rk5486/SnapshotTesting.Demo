@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Api.IntegrationTests;
@@ -12,6 +13,7 @@ public class ApiTests
     {
         _verifySettings = new VerifySettings();
         _verifySettings.ScrubInlineGuids();
+        _verifySettings.ScrubMember<ProblemDetails>(x => x.Extensions);
         _verifySettings.UseDirectory("snapshots");
     }
 

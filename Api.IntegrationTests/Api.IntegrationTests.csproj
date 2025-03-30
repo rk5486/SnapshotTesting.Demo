@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="snapshots\ApiTests.FetchOrderById.verified.txt">
+    <None Update="snapshots">
       <ParentFile>ApiTests</ParentFile>
     </None>
   </ItemGroup>
