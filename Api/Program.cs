@@ -1,12 +1,13 @@
 using Api;
+using Domain;
+using Infrastructure;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using ZiggyCreatures.Caching.Fusion;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddFusionCache();
+builder.Services.AddInfrastructure();
 builder.Services.AddProblemDetails(
     opt =>
     {
@@ -40,9 +41,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapGet(
-       "/api/orders/{orderId:guid}", ([FromRoute] Guid orderId, IFusionCache cache) =>
+       "/api/orders/{orderId:guid}", async ([FromRoute] Guid orderId, IOrderService orderService, CancellationToken ct) =>
        {
-           Order? order = cache.GetOrDefault<Order>(orderId.ToString());
+           Order? order = await orderService.GetOrderAsync(orderId, ct);
 
            if (order is null)
            {
@@ -61,16 +62,10 @@ app.MapGet(
    .WithOpenApi();
 
 app.MapPost(
-       "/api/orders", ([FromBody] CreateOrderRequest req, IFusionCache cache) =>
+       "/api/orders", async ([FromBody] CreateOrderRequest req, IOrderService orderService, CancellationToken ct) =>
        {
-           Order order = new()
-           {
-               OrderId = Guid.NewGuid(),
-               CustomerName = req.CustomerName,
-               DateOrdered = DateTimeOffset.UtcNow,
-           };
+           Order order = await orderService.CreateOrderAsync(req.CustomerName, ct);
            
-           cache.Set(order.OrderId.ToString(), order);
            return Results.CreatedAtRoute("FetchOrderById", new { orderId = order.OrderId }, new OrderResponse
            {
                OrderId = order.OrderId,

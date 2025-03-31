@@ -1,4 +1,4 @@
-namespace Api;
+namespace Domain;
 
 public record Order
 {
