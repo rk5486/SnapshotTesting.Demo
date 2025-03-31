@@ -25,14 +25,19 @@ public class FetchOrderByIdEndpoint
     public override async Task<Results<Ok<FetchOrderByIdResponse>, NotFound, ProblemDetails>> ExecuteAsync(
         FetchOrderByIdRequest req, CancellationToken ct)
     {
-        await Task.Delay(500, ct);
+        Domain.Order? order = await _orderService.GetOrderAsync(req.OrderId, ct);
+
+        if (order is null)
+        {
+            return TypedResults.NotFound();
+        }
 
         return TypedResults.Ok(
             new FetchOrderByIdResponse
                 {
-                    CustomerName = "CustomerName",
-                    OrderId = req.OrderId,
-                    DateOrdered = DateTime.UtcNow
+                    OrderId = order.OrderId,
+                    CustomerName = order.CustomerName,
+                    DateOrdered = order.DateOrdered,
                 }
             );
     }

@@ -20,7 +20,7 @@ internal class OrderService : IOrderService
 
     public async Task<Order?> GetOrderAsync(Guid orderId, CancellationToken ct)
     {
-        return await _cache.GetOrDefaultAsync<Order?>(orderId.ToString(), token: ct);
+        return await _cache.GetOrDefaultAsync<Order>(orderId.ToString(), token: ct);
     }
 
     public async Task<Order> CreateOrderAsync(string customerName, CancellationToken ct)
