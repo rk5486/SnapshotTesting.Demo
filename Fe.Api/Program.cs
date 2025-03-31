@@ -20,3 +20,5 @@ app.UseFastEndpoints(
    .UseSwaggerGen();
 
 await app.RunAsync();
+
+public partial class Program;

@@ -3,7 +3,6 @@ using System.Text.Json;
 using Fe.Api.Features.CreateOrder;
 using Fe.Api.Features.FetchOrderById;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace Fe.Api.IntegrationTests;
 

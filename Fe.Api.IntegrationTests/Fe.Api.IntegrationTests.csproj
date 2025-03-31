@@ -4,7 +4,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <RootNamespace>Fe.Api.IntegrationTests</RootNamespace>
@@ -16,8 +15,11 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
     <PackageReference Include="Verify.Http" Version="6.4.1" />
     <PackageReference Include="Verify.Xunit" Version="28.16.0" />
-    <PackageReference Include="xunit" Version="2.5.3"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3"/>
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="snapshots\" />
+    <None Update="snapshots">
+      <ParentFile>ApiTests</ParentFile>
+    </None>
   </ItemGroup>
 
 </Project>
