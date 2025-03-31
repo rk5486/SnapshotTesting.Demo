@@ -7,6 +7,8 @@ namespace Fe.Api.Features.FetchOrderById;
 public class FetchOrderByIdEndpoint
     : Ep.Req<FetchOrderByIdRequest>.Res<Results<Ok<FetchOrderByIdResponse>, NotFound, ProblemDetails>>
 {
+    public const string ROUTE_NAME = "FetchOrderById";
+    
     private readonly IOrderService _orderService;
     
     public FetchOrderByIdEndpoint(IOrderService orderService)
@@ -17,7 +19,7 @@ public class FetchOrderByIdEndpoint
     public override void Configure()
     {
         Get("/orders/{OrderId:guid}");
-        Description(x => x.WithName("FetchOrderById"));
+        Description(x => x.WithName(ROUTE_NAME));
     }
 
     public override async Task<Results<Ok<FetchOrderByIdResponse>, NotFound, ProblemDetails>> ExecuteAsync(

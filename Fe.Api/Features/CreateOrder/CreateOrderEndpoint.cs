@@ -8,6 +8,8 @@ namespace Fe.Api.Features.CreateOrder;
 public class CreateOrderEndpoint
     : Ep.Req<CreateOrderRequest>.Res<Results<CreatedAtRoute<CreateOrderResponse>, ProblemDetails>>
 {
+    public const string ROUTE_NAME = "CreateOrder";
+    
     private readonly IOrderService _orderService;
 
     public CreateOrderEndpoint(IOrderService orderService)
@@ -18,6 +20,7 @@ public class CreateOrderEndpoint
     public override void Configure()
     {
         Post("/orders");
+        Description(x => x.WithName(ROUTE_NAME));
     }
 
     public override async Task<Results<CreatedAtRoute<CreateOrderResponse>, ProblemDetails>> ExecuteAsync(
@@ -32,6 +35,6 @@ public class CreateOrderEndpoint
             DateOrdered = order.DateOrdered,
         };
 
-        return TypedResults.CreatedAtRoute(dto, "FetchOrderById", new { dto.OrderId });
+        return TypedResults.CreatedAtRoute(dto, FetchOrderByIdEndpoint.ROUTE_NAME, new { dto.OrderId });
     }
 }
