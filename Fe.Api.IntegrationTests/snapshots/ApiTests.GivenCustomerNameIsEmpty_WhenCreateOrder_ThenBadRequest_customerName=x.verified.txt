@@ -1,0 +1,17 @@
+﻿{
+  Status: 400 Bad Request,
+  Content: {
+    Headers: {
+      Content-Type: application/problem+json; charset=utf-8
+    },
+    Value: {
+      statusCode: 400,
+      message: One or more errors occurred!,
+      errors: {
+        customerName: [
+          The length of 'customer Name' must be at least 2 characters. You entered 1 characters.
+        ]
+      }
+    }
+  }
+}

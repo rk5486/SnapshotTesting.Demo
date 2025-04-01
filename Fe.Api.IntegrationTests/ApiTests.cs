@@ -59,6 +59,27 @@ public class ApiTests
         await Verify(actual, _verifySettings);
     }
     
+    [Theory]
+    [InlineData("")]
+    [InlineData("x")]
+    public async Task GivenCustomerNameIsEmpty_WhenCreateOrder_ThenBadRequest(string customerName)
+    {
+        // ARRANGE
+        CreateOrderRequest request = new()
+        {
+            CustomerName = customerName,
+        };
+        
+        await using var application = new WebApplicationFactory<Program>();
+        using var client = application.CreateClient();
+        
+        // ACT
+        var actual = await client.PostAsync("/api/orders", JsonContent.Create(request));
+        
+        // ASSERT
+        await Verify(actual, _verifySettings).UseParameters(customerName);
+    }
+    
     [Fact]
     public async Task GivenOrderId_WhenNotExist_ThenNotFound()
     {
