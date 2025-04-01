@@ -82,7 +82,7 @@ public class ApiTests
     }
     
     [Fact]
-    public async Task GivenOrderId_WhenNotExist_ThenNotFound()
+    public async Task GivenOrderIdNotExist_WhenFetchOrder_ThenNotFound()
     {
         // ARRANGE
         await using var application = new WebApplicationFactory<Program>();
