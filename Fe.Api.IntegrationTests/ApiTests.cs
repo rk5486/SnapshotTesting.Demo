@@ -15,6 +15,7 @@ public class ApiTests
         _verifySettings = new VerifySettings();
         _verifySettings.ScrubInlineGuids();
         _verifySettings.ScrubMember("requestId");
+        _verifySettings.ScrubMember("traceId");
         _verifySettings.UseDirectory("snapshots");
     }
 
@@ -102,7 +103,7 @@ public class ApiTests
         using var client = application.CreateClient();
         
         // ACT
-        var actual = await client.GetAsync("/server-issue");
+        var actual = await client.GetAsync("/api/others/problematic-call");
         
         // ASSERT
         await Verify(actual, _verifySettings);
