@@ -5,17 +5,14 @@
       Content-Type: application/problem+json; charset=utf-8
     },
     Value: {
-      type: https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1,
-      title: Validation Error,
-      status: 400,
-      instance: /api/orders,
-      traceId: {Scrubbed},
-      errors: [
-        {
-          name: customerName,
-          reason: 'customer Name' must not be empty.
-        }
-      ]
+      statusCode: 400,
+      message: One or more errors occurred!,
+      errors: {
+        customerName: [
+          'customer Name' must not be empty.,
+          The length of 'customer Name' must be at least 2 characters. You entered 0 characters.
+        ]
+      }
     }
   }
 }

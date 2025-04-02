@@ -29,7 +29,7 @@ public class FetchOrderByIdEndpoint
 
         if (order is null)
         {
-            return TypedResults.NotFound();
+            throw new Common.NotFound($"Order {req.OrderId} not found");
         }
 
         return TypedResults.Ok(

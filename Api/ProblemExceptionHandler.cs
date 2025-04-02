@@ -56,6 +56,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             );
         }
         
+        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
         return await _problemDetailsService.TryWriteAsync(
             new ProblemDetailsContext
             {

@@ -6,14 +6,18 @@
   },
   Content: {
     Headers: {
-      Content-Type: application/json; charset=utf-8,
+      Content-Type: application/problem+json,
       Expires: -1
     },
     Value: {
-      status: Internal Server Error!,
-      code: 500,
-      reason: An unexpected error has occurred.,
-      note: See application log for stack trace.
+      type: https://www.rfc-editor.org/rfc/rfc9110#name-500-internal-server-error,
+      title: Internal Server Error!,
+      status: 500,
+      detail: An unexpected error has occurred.,
+      instance: GET /api/others/problematic-call,
+      note: See application log for stack trace.,
+      requestId: {Scrubbed},
+      traceId: {Scrubbed}
     }
   }
 }

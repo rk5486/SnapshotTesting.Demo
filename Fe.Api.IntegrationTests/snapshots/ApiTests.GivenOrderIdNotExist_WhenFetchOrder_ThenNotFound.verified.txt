@@ -1,5 +1,22 @@
 ﻿{
-  Version: 1.1,
   Status: 404 Not Found,
-  RequestMessage: http://localhost/api/orders/Guid_1
+  Headers: {
+    Cache-Control: no-store, no-cache,
+    Pragma: no-cache
+  },
+  Content: {
+    Headers: {
+      Content-Type: application/problem+json,
+      Expires: -1
+    },
+    Value: {
+      type: https://www.rfc-editor.org/rfc/rfc9110#name-404-not-found,
+      title: Not Found,
+      status: 404,
+      detail: Order Guid_1 not found,
+      instance: GET /api/orders/Guid_1,
+      requestId: {Scrubbed},
+      traceId: {Scrubbed}
+    }
+  }
 }
